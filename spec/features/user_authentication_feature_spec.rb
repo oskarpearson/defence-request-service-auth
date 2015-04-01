@@ -25,4 +25,17 @@ RSpec.feature 'User authentication' do
       click_button 'Sign in'
       expect(page).to have_content('Invalid email or password')
     end
+
+  # context 'with no associated auth application access' do
+  #   let(:permissions){ create(:permission, :with_gov_app_defence_request_service_auth) }
+  #   let(:user) { permissions.user }
+  #
+  #   specify 'it does not allow authentication' do
+  #     visit new_user_session_path
+  #     fill_in 'user_email', with: user.email
+  #     fill_in 'user_password', with: 'password'
+  #     click_button 'Sign in'
+  #     expect(page).to have_content('You do not have permission for this application')
+  #   end
+  # end
 end
