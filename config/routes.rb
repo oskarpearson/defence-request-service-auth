@@ -11,8 +11,8 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
 
-  namespace :api do
-    namespace :v1 do
+  namespace :api, defaults: { format: 'json' } do
+    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       get "/me", to: "credentials#show"
     end
   end
@@ -25,12 +25,4 @@ Rails.application.routes.draw do
   get '/terms', controller: :static, action: :terms, as: :terms
   get '/expired', controller: :static, action: :expired, as: :expired
 
-  namespace :api, defaults: { format: 'json' } do
-    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
-
-      resources :users, only: :me do
-        get 'me', on: :collection
-      end
-    end
-  end
 end

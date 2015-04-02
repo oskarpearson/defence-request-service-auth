@@ -1,6 +1,7 @@
 class CredentialsSerializer
-  def initialize(user)
+  def initialize(user, gov_app)
     @user = user
+    @gov_app = gov_app
   end
 
   def call
@@ -9,14 +10,15 @@ class CredentialsSerializer
 
   private
 
-  attr_reader :user
+  attr_reader :user, :gov_app
 
   def serialize_credentials
-    {
+    credentials = {
       user: serialized_user,
-      profile: serialized_profile,
-      roles: serialized_roles,
-    }.to_json
+      permissions: serialized_permissions,
+    }
+    credentials.store(:profile, serialized_profile) if user.profile
+    credentials.to_json
   end
 
   def serialized_user
@@ -42,6 +44,17 @@ class CredentialsSerializer
 
   def serialized_roles
     user.roles.pluck(:name)
+  end
+
+  def serialized_permissions
+    user.permissions.map { |p| serialized_permission p }
+  end
+
+  def serialized_permission(permission)
+    {
+      organisation_id: permission.organisation_id,
+      role: permission.role.name
+    }
   end
 
   def profile

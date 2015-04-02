@@ -136,9 +136,16 @@ Returns User object for the user identified by the Authorization Header
                 "PIN": "1234",
                 "organisation_ids": [1,2]
             },
-            "roles": [
-                "admin", "foo", "bar"
-            ]
+           "permissions": [
+              {
+                "organisation_id": 1,
+                "role": "over"
+              },
+              {
+                "organisation_id": 2,
+                "role": "super-danger-admin"
+               }
+           ]
         }
 
 + Response 401 (application/json)
