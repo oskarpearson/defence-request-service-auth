@@ -33,6 +33,19 @@ module Api::V1
       end
     end
 
+    def search
+      profiles = Profile.basic_search(name: search_query_parameter)
+
+      respond_to do |format|
+        format.json { render json: profiles_serializer(profiles) }
+      end
+
+    rescue ActionController::ParameterMissing
+      respond_to do |format|
+        format.json { render json: { "errors" => ["Query parameter missing"] }, status: 400 }
+      end
+    end
+
     private
 
     def credentials_serializer
@@ -48,6 +61,10 @@ module Api::V1
 
     def profile_serializer(profile)
       ProfileSerializer.new(profile)
+    end
+
+    def search_query_parameter
+      params.require(:q)
     end
 
   end

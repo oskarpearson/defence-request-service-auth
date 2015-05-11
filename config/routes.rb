@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       resources :organisations, only: [:index, :show], param: :uid
       resources :profiles, only: [:index, :show], param: :uid do
         get "me", on: :collection
+        get "search", on: :collection
       end
     end
   end
